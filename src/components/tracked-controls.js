@@ -1,5 +1,6 @@
 var registerComponent = require('../core/component').registerComponent;
 var THREE = require('../lib/three');
+var bind = require('../utils/bind');
 
 var ZERO_ORIENTATION = [0, 0, 0, 1];
 var ZERO_POSITION = [0, 0, 0];
@@ -35,6 +36,26 @@ module.exports.Component = registerComponent('tracked-controls', {
 
     this.previousControllerPosition = new THREE.Vector3();
     this.updateGamepad();
+    this.onComponentInitialized = bind(this.onComponentInitialized, this);
+  },
+
+  play: function () {
+    this.el.addEventListener('componentinitialized', this.onComponentInitialized);
+  },
+
+  pause: function () {
+    this.el.removeEventListener('componentinitialized', this.onComponentInitialized);
+  },
+
+  onComponentInitialized: function (evt) {
+    if (evt.detail.name !== 'tracked-controls') { return; }
+    Object.keys(this.el.components).forEach((name) => {
+      const component = this.el.components[name];
+      if (component.controllerPresent) {
+        // Emit controllerpresent event.
+        this.el.emit('controllerpresent', {name: name, component: component});
+      }
+    });
   },
 
   tick: function (time, delta) {
