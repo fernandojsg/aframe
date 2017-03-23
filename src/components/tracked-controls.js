@@ -49,7 +49,7 @@ module.exports.Component = registerComponent('tracked-controls', {
 
   onComponentInitialized: function (evt) {
     if (evt.detail.name !== 'tracked-controls') { return; }
-    Object.keys(this.el.components).forEach((name) => {
+    Object.keys(this.el.components).forEach(function (name) {
       const component = this.el.components[name];
       if (component.controllerPresent) {
         // Emit controllerpresent event.
