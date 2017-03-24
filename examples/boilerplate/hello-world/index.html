@@ -6,13 +6,162 @@
     <meta name="description" content="Hello, World! • A-Frame">
     <script src="../../../dist/aframe-master.js"></script>
   </head>
+  <script>
+  AFRAME.registerComponent('line', {
+    schema: {
+      start: {type: 'vec3', default: '0 0 0'},
+      end: {type: 'vec3', default: '0 0 0'},
+      color: {type: 'color', default: '#fff'}
+    },
+
+    init: function () {
+      var material = this.material = new THREE.LineBasicMaterial({color: this.data.color});
+      var geometry = this.geometry = new THREE.Geometry();
+      this.line = new THREE.Line(geometry, material);
+      this.el.setObject3D('line', this.line);
+    },
+
+    update: function () {
+      var vertices = [];
+      vertices.push(this.data.start);
+      vertices.push(this.data.end);
+      this.geometry.vertices = vertices;
+      this.geometry.verticesNeedUpdate = true;
+    }
+  });
+
+  AFRAME.registerComponent('slice9', {
+    schema: {
+      width: {default: 1},
+      height: {default: 1},
+      color: {type: 'color', default: '#fff'},
+      opacity: {default: 1.0, min: 0, max: 1},
+      padding: {default: 0.1, min: 0.01},
+    },
+
+    init: function () {
+      this.points = {
+        topLeft: [20,20],
+        topRight: [43,20],
+        bottomLeft: [20,43],
+        bottomRight: [43,43]
+      };
+
+      var data = this.data;
+      var material = this.material = new THREE.MeshBasicMaterial({color: data.color, opacity: data.opacity, transparent: true});
+      var geometry = this.geometry = new THREE.PlaneBufferGeometry(data.width, data.height, 3, 3);
+
+      this.regenerate();
+      var textureLoader = new THREE.TextureLoader();
+      material.map = textureLoader.load('tooltip.png');
+
+      this.plane = new THREE.Mesh(geometry, material);
+      this.el.setObject3D('line', this.plane);
+    },
+
+    regenerate: function () {
+      var pos = this.geometry.attributes.position.array;
+      /*
+        0--1------------------------------2--3
+        |  |                              |  |
+        4--5------------------------------6--7
+        |  |                              |  |
+        |  |                              |  |
+        |  |                              |  |
+        8--9-----------------------------10--11
+        |  |                              |  |
+        12-13----------------------------14--15
+      */
+      function setPos(id, x, y) {
+        pos[3 * id] = x;
+        pos[3 * id + 1] = y;
+      }
+
+      var w2 = this.data.width / 2;
+      var h2 = this.data.height / 2;
+      var left = -w2 + this.data.padding;
+      var right = w2 - this.data.padding;
+      var top = h2 - this.data.padding;
+      var bottom = -h2 + this.data.padding;
+
+      setPos(0, -w2,    h2);
+      setPos(1, left,   h2);
+      setPos(2, right,  h2);
+      setPos(3, w2,     h2);
+
+      setPos(4, -w2,    top);
+      setPos(5, left,   top);
+      setPos(6, right,  top);
+      setPos(7, w2,     top);
+
+      setPos(8, -w2,    bottom);
+      setPos(9, left,   bottom);
+      setPos(10, right, bottom);
+      setPos(11, w2,    bottom);
+
+      setPos(13, left,  -h2);
+      setPos(14, right, -h2);
+      setPos(12, -w2,   -h2);
+      setPos(15, w2,    -h2);
+
+      this.geometry.attributes.position.needsUpdate = true;
+      // this.geometry.attributes.uv.needsUpdate = true;
+    },
+
+    update: function (oldData) {
+      console.log(oldData);
+      this.regenerate();
+    }
+  });
+
+  AFRAME.registerComponent('tooltip', {
+    schema: {
+    },
+
+    init: function () {
+
+      var el = this.el;
+      var entity = document.createElement('a-entity');
+      entity.setAttribute('line', {start: '0 0 0', end: '-2 -1 -3'});
+      el.appendChild(entity);
+
+      //el.setAttribute('material', {color: '#444', opacity: 0.8});
+      el.setAttribute('slice9', {width: 0.5, height: 0.2, color: '#333', opacity: 0.8});
+      el.setAttribute('text', {width: 0.5, color: '#fff', value: 'Press to paint!\n(pressure sensitive)', align: 'center'});
+    },
+
+    tick: function (time) {
+      var camera = document.querySelector('[camera]').getObject3D('camera');
+      //this.el.object3D.quaternion.copy(camera.getWorldQuaternion());
+      //
+      var box = document.querySelector('a-box').object3D;
+      box.position.y = Math.sin(time/1000);
+    },
+
+    update: function () {
+    }
+  });
+
+
+  </script>
+
   <body>
     <a-scene>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
+      <a-entity id="test" slice9="width: 2; height: 1"
+                position="0 1 -2">
+      </a-entity>
+<!--
+      <a-box position="-1 0.5 -3" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9">
+        <a-entity tooltip=""
+                  position="0 1 2"
+                  rotation="0 -45 0">
+        </a-entity>
+      </a-box>
+    -->
     </a-scene>
   </body>
 </html>
