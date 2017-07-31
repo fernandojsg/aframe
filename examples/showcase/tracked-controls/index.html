@@ -62,12 +62,5 @@
         <a-entity id="body" obj-model="obj:#headobj;mtl:#headmtl" rotation="0 180 0" position="0 -0.15 0.1"></a-entity>
       </a-camera>
     </a-scene>
-    <script>
-      document.getElementById('body').addEventListener('model-loaded', function(evt) {
-        var model = evt.detail.model;
-        evt.detail.model.getObjectByName('body').visible = false;
-        evt.detail.model.getObjectByName('Cube').visible = false;
-      });
-    </script>
   </body>
 </html>

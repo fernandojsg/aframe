@@ -75,7 +75,7 @@ module.exports.Component = registerComponent('spectator-camera', {
     spectatorCameraEl.setAttribute('position', '0 0 0');
     spectatorCameraEl.setAttribute(SPECTATOR_CAMERA_ATTR, '');
     spectatorCameraEl.setAttribute('camera', {active: false, userHeight: constants.DEFAULT_CAMERA_HEIGHT, fov: 63});
-    spectatorCameraEl.setAttribute('wasd-controls', '');
+    spectatorCameraEl.setAttribute('wasd-controls', true);
     spectatorCameraEl.setAttribute('look-controls', 'hmdEnabled: false');
     spectatorCameraEl.setAttribute('vive-tracker-controls', '');
     spectatorCameraEl.setAttribute(constants.AFRAME_INJECTED, '');
