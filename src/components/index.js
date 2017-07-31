@@ -26,7 +26,6 @@ require('./visible');
 require('./vive-controls');
 require('./vive-tracker-controls');
 require('./wasd-controls');
-
 require('./scene/canvas');
 require('./scene/debug');
 require('./scene/embedded');

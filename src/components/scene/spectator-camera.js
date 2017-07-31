@@ -58,7 +58,7 @@ module.exports.Component = registerComponent('spectator-camera', {
     // Delta FOV
     if (event.code === 'KeyM') { deltaFov = 0.1; }
     if (event.code === 'KeyN') { deltaFov = -0.1; }
-    this.spectatorCameraElq.setAttribute('camera', 'fov', fov + deltaFov);
+    this.spectatorCameraEl.setAttribute('camera', 'fov', fov + deltaFov);
   },
 
   /**

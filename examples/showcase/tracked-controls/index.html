@@ -13,6 +13,8 @@
   <body>
     <a-scene fog="color: #bc483e; near: 0; far: 65;" debug>
       <a-assets>
+        <a-asset-item id="headobj" src="avatar/head.obj"></a-asset-item>
+        <a-asset-item id="headmtl" src="avatar/head.mtl"></a-asset-item>
         <a-mixin id="cube"
                  geometry="primitive: box; height: 0.30; width: 0.30; depth: 0.30"
                  material="color: #EF2D5E;"></a-mixin>
@@ -22,11 +24,11 @@
                  material="color: #F2E646;"></a-mixin>
       </a-assets>
       <!-- Hands -->
-      <a-entity hand-controls="left" aabb-collider="objects: .cube;" grab></a-entity>
-      <a-entity hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
+      <a-entity id="left-hand" hand-controls="left" aabb-collider="objects: .cube;" grab></a-entity>
+      <a-entity id="right-hand" hand-controls="right" aabb-collider="objects: .cube;" grab></a-entity>
 
       <!-- A-Frame cubes -->
-      <a-entity position="0 0 -0.5">
+      <a-entity id="cubes" position="0 0 -0.5">
         <a-entity class="cube" mixin="cube" position="0.30 1.65 0"></a-entity>
         <a-entity class="cube" mixin="cube" position="0 1.95 0"></a-entity>
         <a-entity class="cube" mixin="cube" position="-0.30 1.65 0"></a-entity>
@@ -51,12 +53,21 @@
         <a-entity id="sky"
                   geometry="primitive: sphere; radius: 65;"
                   material="shader: skyGradient; colorTop: #353449; colorBottom: #BC483E; side: back"></a-entity>
-         <a-entity ground></a-entity>
+         <a-entity id="ground" ground></a-entity>
          <a-entity light="type: point; color: #f4f4f4; intensity: 0.2; distance: 0" position="8 10 18"></a-entity>
          <a-entity light="type: point; color: #f4f4f4; intensity: 0.6; distance: 0" position="-8 10 -18"></a-entity>
          <a-entity light="type: ambient; color: #f4f4f4; intensity: 0.4;" position="-8 10 -18"></a-entity>
       </a-entity>
-      <a-camera wasd-controls-enabled="false"></a-camera>
+      <a-camera id="avatar" wasd-controls-enabled="false">
+        <a-entity id="body" obj-model="obj:#headobj;mtl:#headmtl" rotation="0 180 0" position="0 -0.15 0.1"></a-entity>
+      </a-camera>
     </a-scene>
+    <script>
+      document.getElementById('body').addEventListener('model-loaded', function(evt) {
+        var model = evt.detail.model;
+        evt.detail.model.getObjectByName('body').visible = false;
+        evt.detail.model.getObjectByName('Cube').visible = false;
+      });
+    </script>
   </body>
 </html>

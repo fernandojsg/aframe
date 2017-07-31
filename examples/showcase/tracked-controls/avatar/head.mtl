@@ -1,0 +1,24 @@
+# Blender MTL File: 'head.blend'
+# Material Count: 2
+
+newmtl mat_avatar
+Ns 60.784314
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.086093 0.086093 0.086093
+Ke 0.368000 0.368000 0.368000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd avatartex.png
+
+newmtl mat_avatar_NONE
+Ns 60.784314
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.086093 0.086093 0.086093
+Ke 0.368000 0.368000 0.368000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd avatartex.png

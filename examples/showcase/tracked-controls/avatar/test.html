@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>model test</title>
+    <script src="https://aframe.io/releases/0.5.0/aframe.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-asset-item id="headobj" src="head.obj"></a-asset-item>
+        <a-asset-item id="headmtl" src="head.mtl"></a-asset-item>
+      </a-assets>
+      <a-sky color="#777"></a-sky>
+      <a-entity  light="intensity:1;type:hemisphere;" position="-2.5 3 -2.7"></a-entity>
+      <a-entity obj-model="obj:#headobj;mtl:#headmtl" position="0 1.6 -1"></a-entity>
+    </a-scene>
+  </body>
+</html>
